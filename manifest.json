@@ -1,0 +1,22 @@
+{
+  "name": "Travel Planner",
+  "icon": "T",
+  "color": "#1a2a3a",
+  "description": "ein einfacher reiseplaner",
+  "inputs": [
+    {
+      "id": "data",
+      "desc": "Beliebige Daten empfangen"
+    }
+  ],
+  "outputs": [
+    {
+      "id": "state",
+      "desc": "Aktueller App-Zustand"
+    }
+  ],
+  "dataFiles": [
+    "state"
+  ],
+  "pulseSubscriptions": []
+}
