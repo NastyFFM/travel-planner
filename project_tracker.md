@@ -12,7 +12,7 @@
 
 | Feature | Branch | Status | Refined | Plan | Progress | Review | Deployed |
 |---------|--------|--------|---------|------|----------|--------|----------|
-| Initial MVP | main | [ ] pending | [ ] | [ ] | [ ] | [ ] | [ ] |
+| Initial MVP | main | [x] done | [x] | [x] | [x] | [x] | [ ] |
 
 ## Description
 ein einfacher reiseplaner

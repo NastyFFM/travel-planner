@@ -1,1 +1,12 @@
-{}
+{
+  "trips": [
+    {
+      "id": "mo1nj07m78s4h",
+      "title": "Berlin",
+      "start": "2026-07-06",
+      "end": "2026-07-10",
+      "notes": "Das wird ein Spass in Brelin",
+      "packing": []
+    }
+  ]
+}

@@ -6,40 +6,366 @@
 <title>Travel Planner</title>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:-apple-system,BlinkMacSystemFont,sans-serif; background:#0d0d14; color:#e0e0e0; padding:20px; min-height:100vh; }
-h1 { font-size:20px; margin-bottom:8px; }
-p { color:#888; font-size:13px; margin-bottom:20px; }
-.card { background:#1a1a2e; border-radius:8px; padding:16px; margin-bottom:12px; border:1px solid #2a2a3e; }
-button { background:#4ecdc4; color:#0d0d14; border:none; padding:8px 16px; border-radius:6px; cursor:pointer; font-weight:600; }
-button:hover { opacity:0.9; }
-input, textarea { width:100%; padding:8px; background:#13131f; border:1px solid #2a2a3e; border-radius:6px; color:#e0e0e0; font-size:13px; margin-bottom:8px; }
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--bg, #0d1117);
+  color: var(--text, #c9d1d9);
+  padding: 16px;
+  min-height: 100vh;
+  padding-bottom: 60px;
+}
+h1 { font-size: 22px; margin-bottom: 4px; }
+.sub { color: var(--text-dim, #8b949e); font-size: 13px; margin-bottom: 20px; }
+h2 { font-size: 15px; margin-bottom: 10px; color: var(--text-dim, #8b949e); font-weight: 500; }
+
+.card {
+  background: var(--bg-card, #161b22);
+  border: 1px solid var(--border, #30363d);
+  border-radius: 8px;
+  padding: 14px;
+  margin-bottom: 10px;
+  transition: background 0.15s;
+}
+.card:hover { background: var(--bg-card-hover, #1c222b); }
+
+.trip-head { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
+.trip-title { font-size:15px; font-weight:600; color: var(--text, #c9d1d9); }
+.trip-dates { font-size:12px; color: var(--text-dim, #8b949e); margin-top:2px; }
+.trip-notes { font-size:13px; margin-top:8px; color: var(--text, #c9d1d9); white-space:pre-wrap; }
+.trip-actions { display:flex; gap:6px; flex-shrink:0; }
+
+input, textarea, button {
+  font-family: inherit;
+  font-size: 13px;
+}
+input, textarea {
+  width: 100%;
+  padding: 8px 10px;
+  background: var(--bg, #0d1117);
+  border: 1px solid var(--border, #30363d);
+  border-radius: 6px;
+  color: var(--text, #c9d1d9);
+  margin-bottom: 8px;
+}
+input:focus, textarea:focus { outline: none; border-color: var(--teal, #4ecdc4); }
+textarea { resize: vertical; min-height: 60px; }
+
+button {
+  background: var(--teal, #4ecdc4);
+  color: #0d1117;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+button:hover { opacity: 0.88; }
+button.ghost {
+  background: transparent;
+  color: var(--text-dim, #8b949e);
+  border: 1px solid var(--border, #30363d);
+  font-weight: 500;
+  padding: 4px 10px;
+  font-size: 12px;
+}
+button.ghost:hover { color: var(--text, #c9d1d9); border-color: var(--text-dim, #8b949e); }
+button.danger { background: transparent; color: #f87171; border: 1px solid #f87171; font-weight: 500; padding: 4px 10px; font-size: 12px; }
+button.danger:hover { background: rgba(248,113,113,0.1); }
+
+.row { display:flex; gap:8px; }
+.row > * { flex:1; }
+
+.pack-list { margin-top:10px; border-top:1px solid var(--border, #30363d); padding-top:10px; }
+.pack-item { display:flex; align-items:center; gap:8px; padding:4px 0; }
+.pack-item input[type=checkbox] { width:auto; margin:0; accent-color: var(--teal, #4ecdc4); }
+.pack-item .label { flex:1; font-size:13px; }
+.pack-item.done .label { text-decoration: line-through; color: var(--text-dim, #8b949e); }
+.pack-item button { background:transparent; color: var(--text-dim, #8b949e); padding:2px 6px; font-size:14px; }
+.pack-add { display:flex; gap:6px; margin-top:6px; }
+.pack-add input { margin-bottom:0; }
+.pack-add button { padding:6px 12px; font-size:12px; }
+
+.empty { text-align:center; color: var(--text-dim, #8b949e); padding:30px 10px; font-size:13px; }
+
+.backup-bar {
+  position: fixed;
+  bottom: 8px;
+  right: 8px;
+  display: flex;
+  gap: 4px;
+  opacity: 0.55;
+  z-index: 100;
+}
+.backup-bar:hover { opacity: 1; }
+.backup-bar button {
+  background: var(--bg-card, #161b22);
+  border: 1px solid var(--border, #30363d);
+  color: var(--text-dim, #8b949e);
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.toggle { cursor:pointer; user-select:none; font-size:12px; color: var(--text-dim, #8b949e); margin-top:8px; display:inline-block; }
+.toggle:hover { color: var(--text, #c9d1d9); }
 </style>
 </head>
 <body>
-<h1>Travel Planner</h1>
-<p>ein einfacher reiseplaner</p>
-<div class="card">
-  <p>Diese App wurde mit dem PulseOS App-Builder erstellt.</p>
-  <p style="margin-top:8px;">Bearbeite <code>apps/travel-planner/index.html</code> um sie anzupassen.</p>
-</div>
-<script>
-// PulseOS SDK (automatisch verfuegbar):
-// PulseOS.saveState(data)     - Zustand speichern (PUT /app/travel-planner/api/state)
-// PulseOS.loadState()         - Zustand laden (GET /app/travel-planner/api/state)
-// PulseOS.emit(name, data)    - Output an Graph senden
-// PulseOS.onInput(name, cb)   - Input von Graph empfangen
-// PulseOS.onDataChanged(cb)   - Reagiere auf externe Datenänderungen
-// PulseOS.alert(msg)          - Zeige Alert in Agent-Bar
 
-// Graph-Integration: Empfange Daten von anderen Apps
-if (window.PulseOS) {
-  PulseOS.onInput('data', function(incoming) {
-    console.log('Received graph input:', incoming);
-  });
-  PulseOS.onDataChanged(function() {
-    console.log('Data changed externally, reloading...');
+<h1>Travel Planner</h1>
+<p class="sub">ein einfacher reiseplaner</p>
+
+<div class="card">
+  <h2>Neue Reise</h2>
+  <input id="f-title" placeholder="Reiseziel (z.B. Lissabon)" maxlength="80">
+  <div class="row">
+    <input id="f-start" type="date">
+    <input id="f-end" type="date">
+  </div>
+  <textarea id="f-notes" placeholder="Notizen (optional)"></textarea>
+  <button onclick="addTrip()">Reise hinzufügen</button>
+</div>
+
+<h2 style="margin-top:24px;">Meine Reisen</h2>
+<div id="trips"></div>
+
+<div class="backup-bar">
+  <button onclick="downloadBackup()" title="Backup herunterladen">Export</button>
+  <button onclick="uploadBackup()" title="Backup hochladen">Import</button>
+</div>
+
+<script>
+const APP_ID = 'travel-planner';
+const STORAGE_KEY = 'pulseos-app-' + APP_ID;
+
+let state = { trips: [] };
+
+async function saveData(data) {
+  try {
+    const r = await fetch('/app/' + APP_ID + '/api/state', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+    if (r.ok) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); return; }
+  } catch {}
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+async function loadData() {
+  try {
+    const r = await fetch('/app/' + APP_ID + '/api/state');
+    if (r.ok) {
+      const d = await r.json();
+      if (d && Object.keys(d).length) return d;
+    }
+  } catch {}
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; }
+}
+
+function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
+
+function fmtDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  return d.toLocaleDateString('de-DE', { day: '2-digit', month: 'short', year: 'numeric' });
+}
+
+function dateRange(t) {
+  if (t.start && t.end) return fmtDate(t.start) + ' – ' + fmtDate(t.end);
+  if (t.start) return 'ab ' + fmtDate(t.start);
+  if (t.end) return 'bis ' + fmtDate(t.end);
+  return 'kein Datum';
+}
+
+function sortTrips(trips) {
+  return [...trips].sort((a, b) => {
+    const ad = a.start || a.end || '9999';
+    const bd = b.start || b.end || '9999';
+    return ad.localeCompare(bd);
   });
 }
+
+function render() {
+  const box = document.getElementById('trips');
+  const trips = sortTrips(state.trips);
+  if (!trips.length) {
+    box.innerHTML = '<div class="empty">Noch keine Reisen geplant.</div>';
+    return;
+  }
+  box.innerHTML = trips.map(t => {
+    const pack = (t.packing || []).map(p => `
+      <div class="pack-item ${p.done ? 'done' : ''}">
+        <input type="checkbox" ${p.done ? 'checked' : ''} onchange="togglePack('${t.id}','${p.id}')">
+        <span class="label">${escapeHtml(p.text)}</span>
+        <button onclick="removePack('${t.id}','${p.id}')" title="Entfernen">×</button>
+      </div>
+    `).join('');
+    const expanded = t._open;
+    return `
+      <div class="card">
+        <div class="trip-head">
+          <div>
+            <div class="trip-title">${escapeHtml(t.title)}</div>
+            <div class="trip-dates">${dateRange(t)}</div>
+          </div>
+          <div class="trip-actions">
+            <button class="danger" onclick="deleteTrip('${t.id}')">Löschen</button>
+          </div>
+        </div>
+        ${t.notes ? `<div class="trip-notes">${escapeHtml(t.notes)}</div>` : ''}
+        <span class="toggle" onclick="togglePackList('${t.id}')">${expanded ? '▼' : '▶'} Packliste (${(t.packing || []).length})</span>
+        ${expanded ? `
+          <div class="pack-list">
+            ${pack || '<div style="font-size:12px;color:var(--text-dim,#8b949e);margin-bottom:6px;">Noch leer.</div>'}
+            <div class="pack-add">
+              <input placeholder="Neuer Eintrag..." onkeydown="if(event.key==='Enter')addPack('${t.id}', this)">
+              <button onclick="addPack('${t.id}', this.previousElementSibling)">+</button>
+            </div>
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+function escapeHtml(s) {
+  return String(s || '').replace(/[&<>"']/g, c => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[c]));
+}
+
+function addTrip() {
+  const title = document.getElementById('f-title').value.trim();
+  if (!title) { document.getElementById('f-title').focus(); return; }
+  const trip = {
+    id: uid(),
+    title,
+    start: document.getElementById('f-start').value,
+    end: document.getElementById('f-end').value,
+    notes: document.getElementById('f-notes').value.trim(),
+    packing: []
+  };
+  state.trips.push(trip);
+  persist();
+  document.getElementById('f-title').value = '';
+  document.getElementById('f-start').value = '';
+  document.getElementById('f-end').value = '';
+  document.getElementById('f-notes').value = '';
+  render();
+  emitState();
+}
+
+function deleteTrip(id) {
+  if (!confirm('Reise wirklich löschen?')) return;
+  state.trips = state.trips.filter(t => t.id !== id);
+  persist();
+  render();
+  emitState();
+}
+
+function togglePackList(id) {
+  const t = state.trips.find(x => x.id === id);
+  if (!t) return;
+  t._open = !t._open;
+  render();
+}
+
+function addPack(tripId, inputEl) {
+  const text = inputEl.value.trim();
+  if (!text) return;
+  const t = state.trips.find(x => x.id === tripId);
+  if (!t) return;
+  if (!t.packing) t.packing = [];
+  t.packing.push({ id: uid(), text, done: false });
+  inputEl.value = '';
+  persist();
+  render();
+  emitState();
+}
+
+function togglePack(tripId, packId) {
+  const t = state.trips.find(x => x.id === tripId);
+  if (!t) return;
+  const p = t.packing.find(x => x.id === packId);
+  if (!p) return;
+  p.done = !p.done;
+  persist();
+  render();
+  emitState();
+}
+
+function removePack(tripId, packId) {
+  const t = state.trips.find(x => x.id === tripId);
+  if (!t) return;
+  t.packing = t.packing.filter(x => x.id !== packId);
+  persist();
+  render();
+  emitState();
+}
+
+function persist() {
+  const clean = { trips: state.trips.map(t => {
+    const { _open, ...rest } = t; return rest;
+  }) };
+  saveData(clean);
+}
+
+function emitState() {
+  if (window.PulseOS && PulseOS.emit) {
+    try { PulseOS.emit('state', { trips: state.trips.length }); } catch {}
+  }
+}
+
+function downloadBackup() {
+  loadData().then(data => {
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = APP_ID + '-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+    a.click();
+  });
+}
+
+function uploadBackup() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';
+  input.onchange = () => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const data = JSON.parse(reader.result);
+        saveData(data).then(() => location.reload());
+      } catch { alert('Ungültige Backup-Datei'); }
+    };
+    reader.readAsText(input.files[0]);
+  };
+  input.click();
+}
+
+async function init() {
+  const d = await loadData();
+  state.trips = Array.isArray(d.trips) ? d.trips : [];
+  render();
+}
+
+if (window.PulseOS) {
+  PulseOS.onInput && PulseOS.onInput('data', function(incoming) {
+    if (incoming && Array.isArray(incoming.trips)) {
+      state.trips = incoming.trips;
+      persist();
+      render();
+    }
+  });
+  PulseOS.onDataChanged && PulseOS.onDataChanged(function() { init(); });
+}
+
+init();
 </script>
+
+<script src="/sdk.js"></script>
 </body>
 </html>
