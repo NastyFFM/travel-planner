@@ -5,8 +5,8 @@
 - Folder: /Users/chris.pohl/Documents/GitHub/travel-planner
 - Created: 2026-04-16
 - Template: frontend
-- GitHub: not published yet
-- Live URL: not deployed yet
+- GitHub: https://github.com/NastyFFM/travel-planner
+- Live URL: https://nastyffm.github.io/travel-planner/
 
 ## Features
 
